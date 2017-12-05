@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      resources :restaurants, only: [ :show ]
       resources :users, only: [ :create ]
+      post 'shake', to: 'shakes#shake'
     end
   end
 
