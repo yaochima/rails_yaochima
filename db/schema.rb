@@ -10,10 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171205075128) do
+ActiveRecord::Schema.define(version: 20171205093431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "restaurants", force: :cascade do |t|
+    t.string "name"
+    t.string "category"
+    t.string "profile_photo"
+    t.string "rating"
+    t.string "location"
+    t.string "price_range"
+    t.string "phone_number"
+    t.string "address"
+    t.string "lat"
+    t.string "long"
+    t.date   "opening_time"
+    t.date   "closing_time"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string  "session_uuid"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_sessions_on_user_id", using: :btree
+  end
+
+  create_table "shakes", force: :cascade do |t|
+    t.string   "location"
+    t.integer  "session_id"
+    t.integer  "restaurant_id"
+    t.json     "parameters"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["restaurant_id"], name: "index_shakes_on_restaurant_id", using: :btree
+    t.index ["session_id"], name: "index_shakes_on_session_id", using: :btree
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                             default: "", null: false
