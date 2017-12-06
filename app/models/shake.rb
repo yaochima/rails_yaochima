@@ -1,4 +1,4 @@
 class Shake < ApplicationRecord
   belongs_to :session
-  has_many :shakes
+  belongs_to :restaurants
 end
