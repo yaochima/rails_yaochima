@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :restaurants, only: [ :show ]
+      resources :guests, only: [ :create ]
       resources :shakes, only: [ :create ]
     end
   end
