@@ -18,7 +18,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   def return_random_restaurant
     calculate_area
-    @restaurants = Restaurant.where(lat: (@min_lat..@max_lat), long: (@min_lng..@max_lng))
+    @restaurants = Restaurant.where(lat: (@min_lat..@max_lat), lng: (@min_lng..@max_lng))
   end
 
   def calculate_area
