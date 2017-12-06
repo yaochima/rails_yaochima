@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171206140645) do
+ActiveRecord::Schema.define(version: 20171206151854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,11 +33,12 @@ ActiveRecord::Schema.define(version: 20171206140645) do
   create_table "sessions", force: :cascade do |t|
     t.string  "session_uuid"
     t.integer "user_id"
+    t.float   "lat"
+    t.float   "lng"
     t.index ["user_id"], name: "index_sessions_on_user_id", using: :btree
   end
 
   create_table "shakes", force: :cascade do |t|
-    t.string   "location"
     t.integer  "session_id"
     t.integer  "restaurant_id"
     t.json     "parameters"
