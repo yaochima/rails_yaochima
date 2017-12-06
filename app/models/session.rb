@@ -1,4 +1,4 @@
 class Session < ApplicationRecord
-  has_many :guests
+  belongs_to :user
   has_many :shakes
 end
