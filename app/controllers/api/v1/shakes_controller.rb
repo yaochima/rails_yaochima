@@ -4,32 +4,63 @@ class Api::V1::ShakesController < Api::V1::BaseController
     #save parameters
     # @user_uuid = shake_params[:client_uuid]
     # @session_uuid = shake_params[:session_uuid]
-    p shake_params
-    @lng = shake_params[:lng].to_f
-    @lat = shake_params[:lat].to_f
-    @exclusions = shake_params[:exclusions]
-    @locked_category = shake_params[:lockedcategory]
+    @lng = params[:lng].to_f
+    @lat = params[:lat].to_f
+    @exclusions = params[:exclusions]
+    @locked_category = params[:lockedcategory]
+    @locked_price = params[:lockedprice].to_i
+    p "exclusions"
+    p @exclusions
+    p "locked_category"
     p @locked_category
-    @locked_price = shake_params[:lockedprice].to_i
+    p "locked_price"
+    p @locked_price
     #return a random restaurant
+    @error_message = "test"
     return_random_restaurant
     #create session if it does not exists OR assign it to sessions
     # check_session
     #create shake
     # create_shake
     #render response
-    render json: @restaurant
+
+
+
+
+
+
+    p @restaurant
+
+    @response = { id: @restaurant, error_message: @error_message}
+    render json: @response
   end
 
   private
 
-  def shake_params
-    params.permit(:lng, :lat, :exclusions, :lockedcategory, :lockedprice)
-  end
+  # def shake_params
+  #   params.permit(:lng, :lat, :exclusions, :lockedcategory, :lockedprice)
+  # end
 
   def return_random_restaurant
     return_restaurant_list
-    @restaurant = @restaurants.near([@lat, @lng], 1, :units => :km).sample.id
+
+    #future radius extension
+    # [ 1, 1.5, 2, 2,5, 3 ].each do |radius|
+    #   if @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
+    #     return @restaurant = @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
+    #   end
+    # end
+    p "INITIATE"
+    @restaurants.near([@lat, @lng], 1, :units => :km)
+    p @restaurants.class
+    if @restaurants.first.nil?
+
+      @error_message = "There are no more category available"
+      @exclusions = []
+      return_random_restaurant
+    else
+      @restaurant = @restaurants.sample.id
+    end
     # @restaurants = Restaurant.near([@lat, @lng], 10, :units => :km).sample.id
     # @restaurants = @restaurants.where(category: @locked_category)
   end
@@ -37,9 +68,9 @@ class Api::V1::ShakesController < Api::V1::BaseController
   def return_restaurant_list
     @restaurants = Restaurant.all
     if @locked_category
-      @restaurants = @restaurants.where(category: @locked_category)
-    elsif @exclusions != "[]"
-      @exclusions.gsub(/(\[\"|\"\])/, '').split('", "').each do |food_category|
+        @restaurants = @restaurants.where(category: @locked_category)
+    elsif !@exclusions.nil?
+      @exclusions.each do |food_category|
         @restaurants = @restaurants.where.not(category: food_category)
       end
     end
