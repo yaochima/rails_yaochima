@@ -4,9 +4,13 @@ class Api::V1::ShakesController < Api::V1::BaseController
     #save parameters
     # @user_uuid = shake_params[:client_uuid]
     # @session_uuid = shake_params[:session_uuid]
+    p shake_params
     @lng = shake_params[:lng].to_f
     @lat = shake_params[:lat].to_f
-    @parameters = shake_params[:parameters]
+    @exclusions = shake_params[:exclusions]
+    @locked_category = shake_params[:lockedcategory]
+    p @locked_category
+    @locked_price = shake_params[:lockedprice].to_i
     #return a random restaurant
     return_random_restaurant
     #create session if it does not exists OR assign it to sessions
@@ -20,20 +24,37 @@ class Api::V1::ShakesController < Api::V1::BaseController
   private
 
   def shake_params
-    params.permit(:client_uuid, :session_uuid, :lng, :lat, :parameters)
+    params.permit(:lng, :lat, :exclusions, :lockedcategory, :lockedprice)
   end
 
   def return_random_restaurant
-    calculate_area
-
-    @restaurant = Restaurant.where(lat: (@min_lat..@max_lat), lng: (@min_lng..@max_lng)).sample.id
+    return_restaurant_list
+    @restaurant = @restaurants.near([@lat, @lng], 1, :units => :km).sample
+    # @restaurants = Restaurant.near([@lat, @lng], 10, :units => :km).sample.id
+    # @restaurants = @restaurants.where(category: @locked_category)
   end
 
-  def calculate_area
-    @max_lat = @lat + 0.05
-    @min_lat = @lat - 0.05
-    @max_lng = @lng + 0.05
-    @min_lng = @lng - 0.05
+  def return_restaurant_list
+    @restaurants = Restaurant.all
+    if @locked_category
+      @restaurants = @restaurants.where(category: @locked_category)
+    elsif @exclusions != []
+      @exclusions.gsub(/(\[\"|\"\])/, '').split('", "').each do |food_category|
+        @restaurants = @restaurants.where.not(category: food_category)
+      end
+    end
+    if @locked_price != 0
+      p @locked_price
+      calculate_price_range
+      @restaurants = @restaurants.where(price_per_person: @min_price..@max_price)
+    end
+  end
+
+  def calculate_price_range
+    if @locked_price
+      @max_price = @locked_price * 1.05
+      @min_price = @locked_price * 0.75
+    end
   end
 
   # def check_session

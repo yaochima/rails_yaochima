@@ -20,7 +20,7 @@ def generate_fake_restaurants(base_lat, base_lng)
   restaurant.profile_photo = "https://picsum.photos/200/300/?random"
   restaurant.rating = (1..5).to_a.sample
   restaurant.location = Faker::Company.suffix
-  restaurant.price_per_person = (5..500).to_a.sample
+  restaurant.price_per_person = (5..100).to_a.sample
   restaurant.phone_number = Faker::PhoneNumber.phone_number
   restaurant.lat = base_lat - 0.05 + rand / 20
   restaurant.lng = base_lng - 0.05 + rand / 20
@@ -28,6 +28,6 @@ def generate_fake_restaurants(base_lat, base_lng)
 end
 
 200.times do
-  generate_fake_restaurants(30.57, 104.06)
+  generate_fake_restaurants(30.572269, 104.066541)
 end
 
