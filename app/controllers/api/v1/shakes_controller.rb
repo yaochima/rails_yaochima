@@ -9,6 +9,12 @@ class Api::V1::ShakesController < Api::V1::BaseController
     @exclusions = shake_params[:exclusions]
     @locked_category = shake_params[:lockedcategory]
     @locked_price = shake_params[:lockedprice].to_i
+    p "exclusions"
+    p @exclusions
+    p "locked_category"
+    p @locked_category
+    p "locked_price"
+    p @locked_price
     #return a random restaurant
     return_random_restaurant
     #create session if it does not exists OR assign it to sessions
@@ -16,12 +22,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
     #create shake
     # create_shake
     #render response
-    p "exclusions"
-    p @exclusions
-    p "locked_category"
-    p @locked_category
-    p "locked_price"
-    p @locked_price
+
 
 
 
@@ -49,9 +50,9 @@ class Api::V1::ShakesController < Api::V1::BaseController
     if @locked_category
       @restaurants = @restaurants.where(category: @locked_category)
     elsif @exclusions != "[]" || !@exclusions.nil?
-      @exclusions.each do |food_category|
-        p food_category
-        @restaurants = @restaurants.where.not(category: food_category)
+      @exclusions.gsub(/(\[\"|\"\])/, '').split('", "').each do |food_category|
+      p food_category
+      @restaurants = @restaurants.where.not(category: food_category)
       end
     end
     if @locked_price != 0
