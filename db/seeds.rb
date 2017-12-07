@@ -28,6 +28,6 @@ def generate_fake_restaurants(base_lat, base_lng)
 end
 
 200.times do
-  generate_fake_restaurants(30.57, 104.06)
+  generate_fake_restaurants(30.572269, 104.066541)
 end
 
