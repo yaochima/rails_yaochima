@@ -4,12 +4,10 @@ class Api::V1::ShakesController < Api::V1::BaseController
     #save parameters
     # @user_uuid = shake_params[:client_uuid]
     # @session_uuid = shake_params[:session_uuid]
-    p shake_params
     @lng = shake_params[:lng].to_f
     @lat = shake_params[:lat].to_f
     @exclusions = shake_params[:exclusions]
     @locked_category = shake_params[:lockedcategory]
-    p @locked_category
     @locked_price = shake_params[:lockedprice].to_i
     #return a random restaurant
     return_random_restaurant
@@ -18,6 +16,18 @@ class Api::V1::ShakesController < Api::V1::BaseController
     #create shake
     # create_shake
     #render response
+    p "exclusions"
+    p @exclusions
+    p "locked_category"
+    p @locked_category
+    p "locked_price"
+    p @locked_price
+
+
+
+
+
+    p @restaurant
     render json: @restaurant
   end
 
@@ -38,7 +48,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
     @restaurants = Restaurant.all
     if @locked_category
       @restaurants = @restaurants.where(category: @locked_category)
-    elsif @exclusions != "[]"
+    elsif @exclusions != "[]" || !exclusions.nil?
       @exclusions.gsub(/(\[\"|\"\])/, '').split('", "').each do |food_category|
         @restaurants = @restaurants.where.not(category: food_category)
       end
