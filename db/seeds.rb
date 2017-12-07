@@ -6,26 +6,28 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-res = Restaurant.new
-res.name = "McDonald"
-res.category = "FastFood"
-res.profile_photo = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Mcdonalds-90s-logo.svg/220px-Mcdonalds-90s-logo.svg.png"
-res.rating = "5.0"
-res.location = "City Center"
-res.price_range = "1-10 yuan"
-res.phone_number = "123123123123"
-res.lat = "120"
-res.long = "42"
-res.save
 
-res2 = Restaurant.new
-res2.name = "Yunnan Restaurant"
-res2.category = "yunnan"
-res2.profile_photo = "http://www.seriouseats.com/images/2012/09/20120918-yunnan-cover.jpg"
-res2.rating = "4.5"
-res2.location = "City Center"
-res2.price_range = "20-50 yuan"
-res2.phone_number = "123596333441"
-res2.lat = "121"
-res2.long = "43"
-res2.save
+CATEGORY = ["Fast Food",
+            "Sichuan",
+            "Hot Pot",
+            "French",
+            "Japanese"]
+
+def generate_fake_restaurants(base_lng, base_lat)
+  restaurant = Restaurant.new
+  restaurant.name = Faker::Food.dish + " " + Faker::Company.suffix
+  restaurant.type = CATEGORY.sample
+  restaurant.profile_photo = "https://picsum.photos/200/300/?random"
+  restaurant.rating = (1..5).to_a.sample
+  restaurant.location = Faker::Company.suffix
+  restaurant.price_per_person = (5..500).to_a.sample
+  restaurant.phone_number = Faker::PhoneNumber.phone_number
+  restaurant.lat = base_lat - 0.05 + rand / 20
+  restaurant.lng = base_lng - 0.05 + rand / 20
+  restaurant.save
+end
+
+200.times do
+  generate_fake_restaurants(30.65, 104.06)
+end
+

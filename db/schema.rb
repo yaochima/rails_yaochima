@@ -10,34 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171205093431) do
+ActiveRecord::Schema.define(version: 20171207030111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "restaurants", force: :cascade do |t|
-    t.string "name"
-    t.string "category"
-    t.string "profile_photo"
-    t.string "rating"
-    t.string "location"
-    t.string "price_range"
-    t.string "phone_number"
-    t.string "address"
-    t.string "lat"
-    t.string "long"
-    t.date   "opening_time"
-    t.date   "closing_time"
+    t.string  "name"
+    t.string  "type"
+    t.string  "profile_photo"
+    t.string  "location"
+    t.string  "phone_number"
+    t.string  "address"
+    t.date    "opening_time"
+    t.date    "closing_time"
+    t.integer "rating"
+    t.integer "price_per_person"
+    t.float   "lat"
+    t.float   "lng"
   end
 
   create_table "sessions", force: :cascade do |t|
     t.string  "session_uuid"
     t.integer "user_id"
+    t.float   "lat"
+    t.float   "lng"
     t.index ["user_id"], name: "index_sessions_on_user_id", using: :btree
   end
 
   create_table "shakes", force: :cascade do |t|
-    t.string   "location"
     t.integer  "session_id"
     t.integer  "restaurant_id"
     t.json     "parameters"
