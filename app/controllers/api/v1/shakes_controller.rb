@@ -49,7 +49,8 @@ class Api::V1::ShakesController < Api::V1::BaseController
     if @locked_category
       @restaurants = @restaurants.where(category: @locked_category)
     elsif @exclusions != "[]" || !@exclusions.nil?
-      @exclusions.gsub(/(\[\"|\"\])/, '').split('", "').each do |food_category|
+      @exclusions.each do |food_category|
+        p food_category
         @restaurants = @restaurants.where.not(category: food_category)
       end
     end
