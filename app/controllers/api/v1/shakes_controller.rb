@@ -29,7 +29,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   def return_random_restaurant
     return_restaurant_list
-    @restaurant = @restaurants.near([@lat, @lng], 1, :units => :km).sample
+    @restaurant = @restaurants.near([@lat, @lng], 1, :units => :km).sample.id
     # @restaurants = Restaurant.near([@lat, @lng], 10, :units => :km).sample.id
     # @restaurants = @restaurants.where(category: @locked_category)
   end
