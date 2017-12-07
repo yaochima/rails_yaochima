@@ -4,11 +4,11 @@ class Api::V1::ShakesController < Api::V1::BaseController
     #save parameters
     # @user_uuid = shake_params[:client_uuid]
     # @session_uuid = shake_params[:session_uuid]
-    @lng = shake_params[:lng].to_f
-    @lat = shake_params[:lat].to_f
-    @exclusions = shake_params[:exclusions]
-    @locked_category = shake_params[:lockedcategory]
-    @locked_price = shake_params[:lockedprice].to_i
+    @lng = params[:lng].to_f
+    @lat = params[:lat].to_f
+    @exclusions = params[:exclusions]
+    @locked_category = params[:lockedcategory]
+    @locked_price = params[:lockedprice].to_i
     p "exclusions"
     p @exclusions
     p "locked_category"
@@ -34,9 +34,9 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   private
 
-  def shake_params
-    params.permit(:lng, :lat, :exclusions, :lockedcategory, :lockedprice)
-  end
+  # def shake_params
+  #   params.permit(:lng, :lat, :exclusions, :lockedcategory, :lockedprice)
+  # end
 
   def return_random_restaurant
     return_restaurant_list
@@ -50,7 +50,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
     if @locked_category
       @restaurants = @restaurants.where(category: @locked_category)
     elsif @exclusions != "[]" || !@exclusions.nil?
-      @exclusions.gsub(/(\[\"|\"\])/, '').split('", "').each do |food_category|
+      @exclusions.each do |food_category|
       p food_category
       @restaurants = @restaurants.where.not(category: food_category)
       end
