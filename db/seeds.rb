@@ -13,7 +13,7 @@ CATEGORY = ["Fast Food",
             "French",
             "Japanese"]
 
-def generate_fake_restaurants(base_lng, base_lat)
+def generate_fake_restaurants(base_lat, base_lng)
   restaurant = Restaurant.new
   restaurant.name = Faker::Food.dish + " " + Faker::Company.suffix
   restaurant.category = CATEGORY.sample
@@ -28,6 +28,6 @@ def generate_fake_restaurants(base_lng, base_lat)
 end
 
 200.times do
-  generate_fake_restaurants(30.65, 104.06)
+  generate_fake_restaurants(30.57, 104.06)
 end
 

@@ -30,10 +30,10 @@ class Api::V1::ShakesController < Api::V1::BaseController
   end
 
   def calculate_area
-    @max_lat = @lat + 0.01
-    @min_lat = @lat - 0.01
-    @max_lng = @lng + 0.01
-    @min_lng = @lng - 0.01
+    @max_lat = @lat + 0.05
+    @min_lat = @lat - 0.05
+    @max_lng = @lng + 0.05
+    @min_lng = @lng - 0.05
   end
 
   # def check_session
