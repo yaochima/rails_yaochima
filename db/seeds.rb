@@ -16,7 +16,7 @@ CATEGORY = ["Fast Food",
 def generate_fake_restaurants(base_lng, base_lat)
   restaurant = Restaurant.new
   restaurant.name = Faker::Food.dish + " " + Faker::Company.suffix
-  restaurant.type = CATEGORY.sample
+  restaurant.category = CATEGORY.sample
   restaurant.profile_photo = "https://picsum.photos/200/300/?random"
   restaurant.rating = (1..5).to_a.sample
   restaurant.location = Faker::Company.suffix
