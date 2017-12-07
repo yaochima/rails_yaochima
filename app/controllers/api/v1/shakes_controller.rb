@@ -16,6 +16,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
     p "locked_price"
     p @locked_price
     #return a random restaurant
+    @error_message = "test"
     return_random_restaurant
     #create session if it does not exists OR assign it to sessions
     # check_session
@@ -29,7 +30,9 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
 
     p @restaurant
-    render json: @restaurant
+
+    @response = { id: @restaurant, error_message: @error_message}
+    render json: @response
   end
 
   private
@@ -40,7 +43,24 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   def return_random_restaurant
     return_restaurant_list
-    @restaurant = @restaurants.near([@lat, @lng], 1, :units => :km).sample.id
+
+    #future radius extension
+    # [ 1, 1.5, 2, 2,5, 3 ].each do |radius|
+    #   if @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
+    #     return @restaurant = @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
+    #   end
+    # end
+    p "INITIATE"
+    @restaurants.near([@lat, @lng], 1, :units => :km)
+    p @restaurants.class
+    if @restaurants.first.nil?
+
+      @error_message = "There are no more category available"
+      @exclusions = []
+      return_random_restaurant
+    else
+      @restaurant = @restaurants.sample.id
+    end
     # @restaurants = Restaurant.near([@lat, @lng], 10, :units => :km).sample.id
     # @restaurants = @restaurants.where(category: @locked_category)
   end
@@ -48,11 +68,10 @@ class Api::V1::ShakesController < Api::V1::BaseController
   def return_restaurant_list
     @restaurants = Restaurant.all
     if @locked_category
-      @restaurants = @restaurants.where(category: @locked_category)
-    elsif @exclusions != "[]" || !@exclusions.nil?
+        @restaurants = @restaurants.where(category: @locked_category)
+    elsif !@exclusions.nil?
       @exclusions.each do |food_category|
-      p food_category
-      @restaurants = @restaurants.where.not(category: food_category)
+        @restaurants = @restaurants.where.not(category: food_category)
       end
     end
     if @locked_price != 0
