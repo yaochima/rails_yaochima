@@ -5,6 +5,12 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# deployment
+gem 'mina', '< 1', require: false
+gem 'mina-rsync', require: false
+gem 'mina-scp', require: false
+
+
 gem 'geocoder'
 gem 'faker'
 gem "simple_token_authentication"
