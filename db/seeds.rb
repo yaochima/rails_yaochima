@@ -7,27 +7,50 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-CATEGORY = ["Fast Food",
-            "Sichuan",
-            "Hot Pot",
-            "French",
-            "Japanese"]
+# CATEGORY = ["Fast Food",
+#             "Sichuan",
+#             "Hot Pot",
+#             "French",
+#             "Japanese"]
 
-def generate_fake_restaurants(base_lat, base_lng)
-  restaurant = Restaurant.new
-  restaurant.name = Faker::Food.dish + " " + Faker::Company.suffix
-  restaurant.category = CATEGORY.sample
-  restaurant.profile_photo = "https://picsum.photos/200/300/?random"
-  restaurant.rating = (1..5).to_a.sample
-  restaurant.location = Faker::Company.suffix
-  restaurant.price_per_person = (5..100).to_a.sample
-  restaurant.phone_number = Faker::PhoneNumber.phone_number
-  restaurant.lat = base_lat - 0.05 + rand / 20
-  restaurant.lng = base_lng - 0.05 + rand / 20
-  restaurant.save
-end
+# def generate_fake_restaurants(base_lat, base_lng)
+#   restaurant = Restaurant.new
+#   restaurant.name = Faker::Food.dish + " " + Faker::Company.suffix
+#   restaurant.category = CATEGORY.sample
+#   restaurant.profile_photo = "https://picsum.photos/200/300/?random"
+#   restaurant.rating = (1..5).to_a.sample
+#   restaurant.location = Faker::Company.suffix
+#   restaurant.price_per_person = (5..100).to_a.sample
+#   restaurant.phone_number = Faker::PhoneNumber.phone_number
+#   restaurant.lat = base_lat - 0.05 + rand / 20
+#   restaurant.lng = base_lng - 0.05 + rand / 20
+#   restaurant.save
+# end
 
-1000.times do
-  generate_fake_restaurants(30.588066, 104.05435)
+# 1000.times do
+#   generate_fake_restaurants(30.588066, 104.05435)
+# end
+require 'csv'
+
+csv_text = File.read(Rails.root.join('lib', 'seeds', 'shop_list_done.csv'))
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |row|
+  r = Restaurant.new
+  r.dianping_id = row['dianping_id']
+  r.dianping_url = row['dianping_url']
+  r.name = row['name']
+  r.category = row['category']
+  r.profile_photo = row['photo_url']
+  r.rating = row['rating_flavor'] + row['rating_environ'] + row['rating_service']
+  r.rating_flavor = row['rating_flavor']
+  r.rating_environ = row['rating_environ']
+  r.rating_service = row['rating_service']
+  r.address = row['address']
+  r.price_per_person = row['price_per_person']
+  r.phone_number = row["phone_number"]
+  r.lat = row['lat']
+  r.lng = row['lng']
+  r.save
+  p r
 end
 

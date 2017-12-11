@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171206151854) do
+ActiveRecord::Schema.define(version: 20171211032848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,11 @@ ActiveRecord::Schema.define(version: 20171206151854) do
     t.integer "price_per_person"
     t.float   "lat"
     t.float   "lng"
+    t.integer "dianping_id"
+    t.string  "dianping_url"
+    t.float   "rating_flavor"
+    t.float   "rating_environ"
+    t.float   "rating_service"
   end
 
   create_table "sessions", force: :cascade do |t|
