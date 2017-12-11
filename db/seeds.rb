@@ -34,23 +34,29 @@ require 'csv'
 
 csv_text = File.read(Rails.root.join('lib', 'seeds', 'shop_list_done.csv'))
 csv = CSV.parse(csv_text, :headers => true)
+count = 1
 csv.each do |row|
-  r = Restaurant.new
-  r.dianping_id = row['dianping_id']
-  r.dianping_url = row['dianping_url']
-  r.name = row['name']
-  r.category = row['category']
-  r.profile_photo = row['photo_url']
-  r.rating = row['rating_flavor'] + row['rating_environ'] + row['rating_service']
-  r.rating_flavor = row['rating_flavor']
-  r.rating_environ = row['rating_environ']
-  r.rating_service = row['rating_service']
-  r.address = row['address']
-  r.price_per_person = row['price_per_person']
-  r.phone_number = row["phone_number"]
-  r.lat = row['lat']
-  r.lng = row['lng']
-  r.save
-  p r
+  if Restaurant.find_by(dianping_id: row['dianping_id']) || row['rating_flavor'] == "N/A"
+    p "restaurant already exists OR is not good enough"
+  else
+    r = Restaurant.new
+    r.dianping_id = row['dianping_id'].to_i
+    r.dianping_url = row['dianping_url']
+    r.name = row['name']
+    r.category = row['category']
+    r.profile_photo = row['photo_url']
+    r.rating = ((row['rating_flavor'].to_f + row['rating_environ'].to_f + row['rating_service'].to_f) / 6).round(0)
+    r.rating_flavor = row['rating_flavor'].to_f
+    r.rating_environ = row['rating_environ'].to_f
+    r.rating_service = row['rating_service'].to_f
+    r.address = row['address']
+    r.price_per_person = row['price_per_person'].to_i
+    r.phone_number = row["phone_number"]
+    r.lat = row['lat']
+    r.lng = row['lng']
+    r.save
+    count += 1
+    p "created #{count}"
+  end
 end
 
