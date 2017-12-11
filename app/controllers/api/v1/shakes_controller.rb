@@ -6,6 +6,8 @@ class Api::V1::ShakesController < Api::V1::BaseController
     # @session_uuid = shake_params[:session_uuid]
     @lng = params[:lng].to_f
     @lat = params[:lat].to_f
+    p params[:lng]
+    p params[:lat]
     @exclusions = params[:exclusions]
     @locked_category = params[:lockedcategory]
     @locked_price = params[:lockedprice].to_i
@@ -16,7 +18,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
     p "locked_price"
     p @locked_price
     #return a random restaurant
-    @error_message = "test"
+    @radius_km = 1
     return_random_restaurant
     #create session if it does not exists OR assign it to sessions
     # check_session
@@ -31,8 +33,18 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
     p @restaurant
 
-    @response = { id: @restaurant, error_message: @error_message}
-    render json: @response
+    @restaurant
+    if @error_message.nil?
+      render json: { status: "ok",
+                     restaurants: {
+                     id: @restaurant
+                    }}
+    elsif @error_message
+      render json: { status: "error" ,
+                     error: {
+                     error_message: @error_message
+                      }}
+    end
   end
 
   private
@@ -42,28 +54,95 @@ class Api::V1::ShakesController < Api::V1::BaseController
   # end
 
   def return_random_restaurant
-    return_restaurant_list
+    p "RUN RETURN"
+    return_near_restaurant_list
+    return_category_restaurant_list
+    return_price_restaurant_list
 
-    #future radius extension
-    # [ 1, 1.5, 2, 2,5, 3 ].each do |radius|
-    #   if @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
-    #     return @restaurant = @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
-    #   end
-    # end
-    p "INITIATE"
-    @restaurants.near([@lat, @lng], 1, :units => :km)
-    p @restaurants.class
-    if @restaurants.first.nil?
-
-      @error_message = "There are no more category available"
-      @exclusions = []
-      return_random_restaurant
-    else
+    @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
+    if @error_message.nil?
       @restaurant = @restaurants.sample.id
     end
-    # @restaurants = Restaurant.near([@lat, @lng], 10, :units => :km).sample.id
-    # @restaurants = @restaurants.where(category: @locked_category)
+
+
+    # return_restaurant_list
+
+    # #future radius extension
+    # # [ 1, 1.5, 2, 2,5, 3 ].each do |radius|
+    # #   if @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
+    # #     return @restaurant = @restaurants.near([@lat, @lng], radius, :units => :km).sample.id
+    # #   end
+    # # end
+    # p "INITIATE"
+    # @restaurants.near([@lat, @lng], 1, :units => :km)
+    # p @restaurants.class
+    # if @restaurants.first.nil?
+
+    #   @error_message = "There are no more category available"
+    #   @exclusions = []
+    #   return_random_restaurant
+    # else
+    #   @restaurant = @restaurants.sample.id
+    # end
+    # # @restaurants = Restaurant.near([@lat, @lng], 10, :units => :km).sample.id
+    # # @restaurants = @restaurants.where(category: @locked_category)
   end
+
+  def return_near_restaurant_list
+    @restaurants = Restaurant.all
+    @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
+    if @restaurants.first.nil?
+      if @radius_km == 3.0
+        @error_message = "There are no restaurant around"
+      else
+        @radius_km += 0.5
+        return_restaurant_list
+      end
+    end
+  end
+
+  def return_category_restaurant_list
+    if @locked_category
+      @restaurants = @restaurants.where(category: @locked_category)
+      if @restaurants.first.nil?
+        if @radius_km == 3.0
+          @error_message = "There are no restaurant with your locked category around"
+        else
+          @radius_km  += 0.5
+          return_random_restaurant
+        end
+      end
+    elsif !@exclusions.nil?
+      @exclusions.each do |food_category|
+        @restaurants = @restaurants.where.not(category: food_category)
+        if @restaurants.first.nil?
+          if @radius_km == 3.0
+            @error_message = "There are no restaurant with your excluded category around"
+          else
+            @radius_km  += 0.5
+            return_random_restaurant
+          end
+        end
+      end
+    end
+  end
+
+  def return_price_restaurant_list
+    if @locked_price != 0
+      @max_price = @locked_price * 1.05
+      @min_price = @locked_price * 0.75
+      @restaurants = @restaurants.where(price_per_person: @min_price..@max_price)
+      if @restaurants.first.nil?
+        if @radius_km == 3.0
+          @error_message = "There are no restaurant with your desired price range around"
+        else
+          @radius_km  += 0.5
+          return_random_restaurant
+        end
+      end
+    end
+  end
+
 
   def return_restaurant_list
     @restaurants = Restaurant.all
@@ -80,6 +159,14 @@ class Api::V1::ShakesController < Api::V1::BaseController
       @restaurants = @restaurants.where(price_per_person: @min_price..@max_price)
     end
   end
+
+  def return_locked_category_restaurant_list
+    @restaurants = @restaurants.where(category: @locked_category)
+    if @restaurants.first.nil?
+      @error_message = "No more categories, shake again!"
+    end
+  end
+
 
   def calculate_price_range
     if @locked_price
