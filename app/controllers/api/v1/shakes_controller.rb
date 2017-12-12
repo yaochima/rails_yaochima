@@ -56,7 +56,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
   def return_random_restaurant
     p "RUN RETURN"
     return_near_restaurant_list
-    return_rated_resstaurant_list
+    return_rated_restaurant_list
     return_category_restaurant_list
     return_price_restaurant_list
 
