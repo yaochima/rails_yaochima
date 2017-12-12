@@ -93,7 +93,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
     @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
     if @restaurants.first.nil?
       if @radius_km == 3.0
-        @error_message = "There are no restaurant around"
+        @error_message = "没找到合适的结果…… 再摇一摇"
       else
         @radius_km += 0.5
         return_restaurant_list
@@ -106,7 +106,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
       @restaurants = @restaurants.where(category: @locked_category)
       if @restaurants.first.nil?
         if @radius_km == 3.0
-          @error_message = "There are no restaurant with your locked category around"
+          @error_message = "没找到合适的结果…… 再摇一摇"
         else
           @radius_km  += 0.5
           return_random_restaurant
@@ -117,7 +117,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
         @restaurants = @restaurants.where.not(category: food_category)
         if @restaurants.first.nil?
           if @radius_km == 3.0
-            @error_message = "There are no restaurant with your excluded category around"
+            @error_message = "没找到合适的结果…… 再摇一摇"
           else
             @radius_km  += 0.5
             return_random_restaurant
@@ -134,7 +134,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
       @restaurants = @restaurants.where(price_per_person: @min_price..@max_price)
       if @restaurants.first.nil?
         if @radius_km == 3.0
-          @error_message = "There are no restaurant with your desired price range around"
+          @error_message = "没找到合适的结果…… 再摇一摇"
         else
           @radius_km  += 0.5
           return_random_restaurant
@@ -163,7 +163,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
   def return_locked_category_restaurant_list
     @restaurants = @restaurants.where(category: @locked_category)
     if @restaurants.first.nil?
-      @error_message = "No more categories, shake again!"
+      @error_message = "没找到合适的结果…… 再摇一摇"
     end
   end
 
