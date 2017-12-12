@@ -71,6 +71,9 @@ task :deploy => :environment do
 
     to :launch do
       queue "sudo supervisorctl restart yaochima:yaochima-web-1"
+      scp_upload('assets/Peek.svg', "#{@root_path}/public/", verbose: true)
+      scp_upload('assets/share-logo-300.svg', "#{@root_path}/public/", verbose: true)
+      scp_upload('assets/landingbackgroundsmall.png', "#{@root_path}/public/", verbose: true)
     end
   end
 end
