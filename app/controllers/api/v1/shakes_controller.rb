@@ -33,7 +33,6 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
     p @restaurant
 
-    @restaurant
     if @error_message.nil?
       render json: { status: "ok",
                      restaurants: {
@@ -62,7 +61,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
     @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
     if @error_message.nil?
-      @restaurant = @restaurants.sample
+      @restaurant = @restaurants.sample.id
     end
 
 
@@ -97,12 +96,12 @@ class Api::V1::ShakesController < Api::V1::BaseController
         @error_message = "没找到合适的结果…… 再摇一摇"
       else
         @radius_km += 0.5
-        return_restaurant_list
+        return_random_restaurant
       end
     end
   end
 
-  def return_rated_resstaurant_list
+  def return_rated_restaurant_list
     @restaurants = @restaurants.where(rating: 3..6)
     @restaurants = @restaurants.where.not(price_per_person: 0)
     if @restaurants.first.nil?
@@ -110,7 +109,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
         @error_message = "没找到合适的结果…… 再摇一摇"
       else
         @radius_km += 0.5
-        return_restaurant_list
+        return_random_restaurant
       end
     end
   end

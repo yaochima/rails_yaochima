@@ -13,7 +13,7 @@ set :deploy_to, @root_path
 # set :repository, 'https://github.com/kwnath/seeme.git'
 
 # set :branch, 'master'
-set :branch, 'deploy'
+set :branch, 'master'
 
 set :term_mode, nil
 
