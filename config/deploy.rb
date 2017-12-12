@@ -15,6 +15,8 @@ set :deploy_to, @root_path
 # set :branch, 'master'
 set :branch, 'deploy'
 
+set :term_mode, nil
+
 set :rsync_options, %w[
   --recursive --delete --delete-excluded
   --exclude .git*
