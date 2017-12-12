@@ -62,7 +62,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
     @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
     if @error_message.nil?
-      @restaurant = @restaurants.sample.id
+      @restaurant = @restaurants.sample
     end
 
 
@@ -104,6 +104,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   def return_rated_resstaurant_list
     @restaurants = @restaurants.where(rating: 3..6)
+    @restaurants = @restaurants.where.not(price_per_person: 0)
     if @restaurants.first.nil?
       if @radius_km == 3.0
         @error_message = "没找到合适的结果…… 再摇一摇"
