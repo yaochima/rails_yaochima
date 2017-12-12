@@ -71,11 +71,18 @@ task :deploy => :environment do
 
     to :launch do
       queue "sudo supervisorctl restart yaochima:yaochima-web-1"
-      scp_upload('assets/Peek.svg', "#{@root_path}/public/", verbose: true)
-      scp_upload('assets/share-logo-300.svg', "#{@root_path}/public/", verbose: true)
-      scp_upload('assets/landingbackgroundsmall.png', "#{@root_path}/public/", verbose: true)
     end
   end
+end
+
+def upload_assets
+  scp_upload('assets/Peek.svg', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/share-logo-300.svg', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/landingbackgroundsmall.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/logo-rotate-19.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/logo-cat.svg', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/logo-back-16.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/yaochima.mp3', "#{@root_path}/public/", verbose: true)
 end
 
 def sync_production_env
@@ -85,4 +92,8 @@ end
 
 task :sync_env do
   sync_production_env
+end
+
+task :upload_assets do
+  upload_assets
 end
