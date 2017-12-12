@@ -56,6 +56,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
   def return_random_restaurant
     p "RUN RETURN"
     return_near_restaurant_list
+    return_rated_resstaurant_list
     return_category_restaurant_list
     return_price_restaurant_list
 
@@ -91,6 +92,18 @@ class Api::V1::ShakesController < Api::V1::BaseController
   def return_near_restaurant_list
     @restaurants = Restaurant.all
     @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
+    if @restaurants.first.nil?
+      if @radius_km == 3.0
+        @error_message = "没找到合适的结果…… 再摇一摇"
+      else
+        @radius_km += 0.5
+        return_restaurant_list
+      end
+    end
+  end
+
+  def return_rated_resstaurant_list
+    @restaurants = @restaurants.where(rating: 3..6)
     if @restaurants.first.nil?
       if @radius_km == 3.0
         @error_message = "没找到合适的结果…… 再摇一摇"
