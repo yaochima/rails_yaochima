@@ -83,6 +83,9 @@ def upload_assets
   scp_upload('assets/logo-cat.svg', "#{@root_path}/public/", verbose: true)
   scp_upload('assets/logo-back-16.png', "#{@root_path}/public/", verbose: true)
   scp_upload('assets/yaochima.mp3', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/index-text-loop.svg', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/index-background.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/index-cat-logo.svg', "#{@root_path}/public/", verbose: true)
 end
 
 def sync_production_env

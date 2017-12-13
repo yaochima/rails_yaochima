@@ -148,8 +148,21 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   def calculate_price_range
     if @locked_price
-      @max_price = @locked_price * 1.05
-      @min_price = @locked_price * 0.75
+      if @locked_price > 300
+        @max_price = 100000
+        @min_price = 301
+      elsif @locked_price > 100
+        @max_price = 300
+        @min_price = 101
+      elsif @locked_price > 50
+        @max_price = 100
+        @min_price = 51
+      elsif @locked_price <= 50
+        @max_price = 50
+        @min_price = 1
+      else
+        @error_message = "没找到合适的结果…… 再摇一摇"
+      end
     end
   end
 
