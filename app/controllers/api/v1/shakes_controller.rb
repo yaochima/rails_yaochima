@@ -91,8 +91,7 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   def return_price_restaurant_list
     if @locked_price != 0
-      @max_price = @locked_price * 1.05
-      @min_price = @locked_price * 0.75
+      calculate_price_range
       @restaurants = @restaurants.where(price_per_person: @min_price..@max_price)
       error_messages
     end
