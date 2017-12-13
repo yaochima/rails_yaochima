@@ -100,9 +100,13 @@ class Api::V1::ShakesController < Api::V1::BaseController
   end
 
   def return_different_restaurant_list
-    @rest_exclusions.each do |restaurant_id|
-      @restaurants.where.not(id: restaurant_id)
-      error_messages
+    if rest_exclusions.nil?
+      return @restaurants
+    else
+      @rest_exclusions.each do |restaurant_id|
+        @restaurants.where.not(id: restaurant_id)
+        error_messages
+      end
     end
   end
 
