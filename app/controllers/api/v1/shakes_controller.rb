@@ -59,8 +59,6 @@ class Api::V1::ShakesController < Api::V1::BaseController
     return_rated_restaurant_list
     return_category_restaurant_list
     return_price_restaurant_list
-
-
     @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
     if @error_message.nil?
       @restaurant = @restaurants.sample.id
@@ -105,7 +103,8 @@ class Api::V1::ShakesController < Api::V1::BaseController
       return @restaurants
     else
       @rest_exclusions.each do |restaurant_id|
-        @restaurants.where.not(id: restaurant_id)
+        p restaurant_id
+        @restaurants = @restaurants.where.not(id: restaurant_id)
         error_messages
       end
     end
