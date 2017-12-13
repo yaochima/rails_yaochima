@@ -55,10 +55,11 @@ class Api::V1::ShakesController < Api::V1::BaseController
 
   def return_random_restaurant
     return_near_restaurant_list
+    return_different_restaurant_list
     return_rated_restaurant_list
     return_category_restaurant_list
     return_price_restaurant_list
-    return_different_restaurant_list
+
 
     @restaurants = @restaurants.near([@lat, @lng], @radius_km, :units => :km)
     if @error_message.nil?
@@ -100,9 +101,13 @@ class Api::V1::ShakesController < Api::V1::BaseController
   end
 
   def return_different_restaurant_list
-    @rest_exclusions.each do |restaurant_id|
-      @restaurants.where.not(id: restaurant_id)
-      error_messages
+    if @rest_exclusions.nil?
+      return @restaurants
+    else
+      @rest_exclusions.each do |restaurant_id|
+        @restaurants.where.not(id: restaurant_id)
+        error_messages
+      end
     end
   end
 
