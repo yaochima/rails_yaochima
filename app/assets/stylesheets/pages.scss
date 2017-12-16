@@ -1,0 +1,175 @@
+// Place all the styles related to the pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  font-family: 'Bungee', cursive;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+h3 {
+  margin: 5px;
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  position: relative;
+}
+
+table {
+  text-align: center;
+}
+
+.title-text {
+  z-index: 99;
+  color: #F65C2B;
+  position: absolute;
+  font-size: 50px;
+  top: 25px;
+  left: 20px;
+}
+
+.subtitle-text {
+  z-index: 99;
+  color: #F65C2B;
+  position: absolute;
+  font-size: 30px;
+  top: 120px;
+  right: 40px;
+}
+
+.logo-group {
+  width: 600px;
+  height: 500px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  margin-bottom: 80px;
+}
+
+.landing-group {
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #F65C2B;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-loop {
+  position: absolute;
+  z-index: -1;
+  animation: spin 20s infinite linear;
+  transform: translate3d(0, 0, 0);
+}
+
+.bowl-icon {
+  width: 50px;
+  height: 50px;
+  margin-top: 80px;
+  animation: bounce 1s ease-in-out both infinite;
+}
+
+.qrcode {
+  height: 300px;
+  width: 300px;
+}
+
+tr>td>p {
+  font-size: 10px;
+}
+
+.profilepic {
+  margin: 30px 50px;
+  height: 170px;
+  width: 170px;
+  margin-bottom: 10px;
+}
+
+.wechat-icon {
+  height: 50px;
+  width: 50px;
+
+}
+
+.logo-cat {
+  animation: shake .8s cubic-bezier(.36,.07,.19,.97) both infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.center-text {
+  text-align: center;
+}
+
+.team {
+  padding: 20px;
+  color: #F65C2B;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+}
+
+.icon-row {
+
+}
+
+/*- - - - - - - - - - - - - Animations*/
+
+@keyframes shake {
+  0% {
+    transform: translate3d(0px, 0, 0);
+  }
+  3% {
+    transform: translate3d(3px, 0, 0);
+  }
+  6% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  10% {
+    transform: translate3d(0px, 0, 0);
+  }
+  13% {
+    transform: translate3d(3px, 0, 0);
+  }
+  16% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  20% {
+    transform: translate3d(0px, 0, 0);
+  }
+  100% {
+    transform: translate3d(0px, 0, 0);
+  }
+
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg)}
+    50% { transform: rotate(180deg)}
+    100% { transform: rotate(360deg)}
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+

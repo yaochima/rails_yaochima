@@ -93,6 +93,15 @@ def upload_assets
   scp_upload('assets/yaochima6.mp3', "#{@root_path}/public/", verbose: true)
   scp_upload('assets/yaochima7.mp3', "#{@root_path}/public/", verbose: true)
   scp_upload('assets/yaochima8.mp3', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/alina.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/fabien.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/grace.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/qrcode.jpg', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/icons/icon_design-03.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/icons/icon_design-04.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/icons/icon_design-07.png', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/icons/wechat-icon-mp.svg', "#{@root_path}/public/", verbose: true)
+  scp_upload('assets/icons/wechat-icon.svg', "#{@root_path}/public/", verbose: true)
 end
 
 def sync_production_env
